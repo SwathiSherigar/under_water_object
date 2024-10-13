@@ -20,7 +20,7 @@ pip install opencv-python-headless numpy pillow matplotlib streamlit moviepy
 ## How to Run
 
 
-### 3. Run the Web Application
+### Run the Web Application
 
 To launch the Streamlit web app:
 
