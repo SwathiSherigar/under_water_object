@@ -7,7 +7,7 @@ This project focuses on detecting various underwater objects such as crabs, fish
 
 ## Dataset
 
-- **Brackish Dataset**: A dataset from Kaggle containing images of underwater scenes with annotations for object detection.
+- **Brackish Dataset**: A dataset from Kaggle containing videos of underwater scenes with annotations for object detection.
 
 ## Requirements
 
