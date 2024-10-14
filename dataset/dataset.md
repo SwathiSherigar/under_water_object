@@ -24,7 +24,7 @@ The next step was to annotate the dataset and convert the annotations into the Y
 
 2. **YOLO Format**:
    - YOLO requires annotations in `.txt` files for each image, with each line containing:
-     - `class_id` (e.g., 0 for fish, 1 for coral, etc.)
+     - `class_id` (e.g., 0 for crab, 1 for fish, etc.)
      - `x_center` (normalized by image width)
      - `y_center` (normalized by image height)
      - `width` (normalized by image width)
