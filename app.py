@@ -4,6 +4,7 @@ import numpy as np
 from ultralytics import YOLO
 import streamlit as st
 from moviepy.editor import ImageSequenceClip
+from PIL import Image
 
 # Load the trained model
 model = YOLO(r'C:\Users\swath\OneDrive\Desktop\u\best (2).pt')
@@ -17,6 +18,33 @@ class_labels = {
     4: "small fish",
     5: "starfish"
 }
+
+# Define the detection pipeline function for images
+def image_detection_pipeline(image):
+    # Convert image to OpenCV format
+    img = np.array(image)
+
+    # Run YOLO model on the image
+    results = model(img)
+
+    # Draw bounding boxes and labels on the image
+    for result in results:
+        for box in result.boxes:
+            # Get the predicted class ID
+            class_id = int(box.cls)
+
+            # Get the class label from the dictionary
+            class_label = class_labels.get(class_id, 'Unknown')
+
+            # Get the bounding box coordinates
+            bbox = box.xyxy[0].cpu().numpy()
+
+            # Draw bounding box and label on the image
+            img = cv2.rectangle(img, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255, 0, 0), 2)
+            cv2.putText(img, class_label, (int(bbox[0]), int(bbox[1]) - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
+
+    return img
 
 # Define the detection pipeline function for videos
 def video_detection_pipeline(video_path):
@@ -68,7 +96,20 @@ st.title("Under Water Object Detection")
 st.sidebar.title("Upload an Image or Video")
 media_type = st.sidebar.selectbox("Choose the media type", ['Image', 'Video'])
 
-if media_type == 'Video':
+if media_type == 'Image':
+    uploaded_image = st.sidebar.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
+    
+    if uploaded_image is not None:
+        # Load the image using PIL
+        image = Image.open(uploaded_image)
+
+        # Perform image detection
+        processed_image = image_detection_pipeline(image)
+
+        # Convert the processed image back to RGB for Streamlit display
+        st.image(processed_image, caption="Processed Image", use_column_width=True)
+
+elif media_type == 'Video':
     uploaded_video = st.sidebar.file_uploader("Upload a Video", type=["mp4", "avi", "mov"])
     
     if uploaded_video is not None:
