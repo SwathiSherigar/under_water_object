@@ -19,10 +19,13 @@ class_labels = {
     5: "starfish"
 }
 
-# Define the detection pipeline function for images
 def image_detection_pipeline(image):
     # Convert image to OpenCV format
     img = np.array(image)
+
+    # If the image has 4 channels (RGBA), convert it to 3 channels (RGB)
+    if img.shape[-1] == 4:
+        img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
 
     # Run YOLO model on the image
     results = model(img)
@@ -45,6 +48,7 @@ def image_detection_pipeline(image):
                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
 
     return img
+
 
 # Define the detection pipeline function for videos
 def video_detection_pipeline(video_path):
